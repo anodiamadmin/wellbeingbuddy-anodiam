@@ -1,0 +1,480 @@
+Ticket 1: Create the SQLAlchemy Base Class with Audit Columns
+Create a Base class inheriting from SQLAlchemy's Declarative Base.
+Include the following columns on all inheriting models:
+created_at: DateTime(timezone=True), with server_default=func.now().
+updated_at: DateTime(timezone=True), with server_default=func.now(), and onupdate=func.now().
+created_by: UUID(as_uuid=True), Nullable. (Use @declared_attr if implementing as a strict Foreign Key to avoid circular imports).
+updated_by: UUID(as_uuid=True), Nullable.
+
+Ticket 2: Create Soft Delete SQLAlchemy Mixin
+Create a SoftDeleteMixin class containing:
+deleted_at: DateTime(timezone=True), Nullable.
+deleted_by: UUID(as_uuid=True), Nullable.
+Global Filtering: Implement a SQLAlchemy do_orm_execute event listener. This listener must intercept all select() queries targeting models with this mixin and automatically append a .where(Model.deleted_at.is_(None)) clause, ensuring soft-deleted rows are completely invisible to the application logic.
+
+Ticket 3: Create Alembic Migrations & SQLAlchemy Models (UPDATED)
+- CRITICAL DBA INSTRUCTION: Ensure explicit Foreign Key indexing (index=True) on all FKs.
+- users Table: Inherits from Base & SoftDeleteMixin.
+id: UUID (PK), platform_id: String (Unique)
+is_superadmin: Boolean, Default False (CRITICAL: Do not add a role column here).
+password_hash: String, Nullable
+requires_password_change: Boolean, Default True
+last_signin_at, password_updated_at: TIMESTAMP, Nullable
+Identity: email (String, Nullable, Partial Unique Index), username (String, Nullable, Partial Unique Index)
+Profile: first_name (String), middle_name (String, Nullable), last_name (String), dob (Date, Nullable), gender (ENUM: MALE, FEMALE, NON_BINARY, PREFER_NOT_TO_SAY), pronouns (String, Nullable), honorifics (String, Nullable).
+- user_school_roles Table (The Junction):
+id (PK), user_id (FK), school_id (FK), role (ENUM: ADMIN, TEACHER, STUDENT, PARENT), is_active (Boolean).
+- action_tokens Table:
+id (PK), token (String, Unique), token_type (Enum: CREDENTIALS_DOWNLOAD), school_id (FK, Nullable), user_id (FK), expires_at (Timestamp).
+Forensic Cameras: created_ip_address (String, Nullable), created_user_agent (String, Nullable), consumed_at (Timestamp, Nullable), consumed_ip_address (String, Nullable), consumed_user_agent (String, Nullable).
+Constraint: Apply Table-Level CHECK (token_type != 'CREDENTIALS_DOWNLOAD' OR school_id IS NOT NULL).
+- student_parent_Associations Table:
+student_id (Composite PK), parent_id (Composite PK), is_verified (Boolean, default False), verified_at (Timestamp, Nullable).
+legal_agreements Table:
+id (PK), agreement_type (Enum: CREDENTIAL_DISTRIBUTION_LIABILITY), version (String), content_text (Text), is_active (Boolean).
+Constraint: Partial Unique Index on (agreement_type) WHERE is_active = true.
+- user_consents Table:
+id (PK), user_id (FK), legal_agreement_id (FK), withdrawn_at (Timestamp, Nullable), ip_address (String), user_agent (String).
+- audit_logs Table (STRICT APPEND-ONLY):
+id (PK), actor_id (FK), school_id (FK, Nullable), action (Enum: CREATED, UPDATED, DELETED, CLAIMED, EXPORTED), entity_type (Enum: USER, SCHOOL, CLASS, YEAR_LEVEL, ACADEMIC_SESSION, ACTION_TOKEN, LEGAL_AGREEMENT, USER_CONSENT), entity_id (UUID), details (JSONB), ip_address (String), user_agent (String).
+- schools Table:
+id (PK, UUID), name (String), suburb (String), is_active (Boolean, Default True).
+academic_sessions Table:
+id (PK, UUID), school_id (FK), name (String), start_date (Date), end_date (Date), is_active (Boolean).
+year_levels Table:
+id (PK, UUID), school_id (FK), name (String).
+classes Table:
+id (PK, UUID), school_id (FK), year_level_id (FK), session_id (FK), name (String).
+teacher_class_associations Table:
+teacher_id (Composite PK, FK), class_id (Composite PK, FK).
+student_class_associations Table:
+student_id (Composite PK, FK), class_id (Composite PK, FK), enrollment_status (Enum: ACTIVE, INACTIVE), enrolled_at (Timestamp).
+
+Ticket 4: Configure Strict CORS Middleware for HttpOnly Cookies
+Configure the FastAPI application instance to permit cross-origin requests from the React frontend while strictly adhering to browser security rules for HttpOnly cookies.
+No Wildcards: Ensure allow_origins does NOT contain ["*"].
+Environment-Aware Origins: Read a comma-separated list of allowed frontend URLs from the .env file. Parse this into the allow_origins list.
+The Cookie Rule: Set allow_credentials=True. (Required for the credentials: 'include' header).
+Methods & Headers: Set allow_methods=["*"] and allow_headers=["*"].
+Expose Headers: Set expose_headers=["Content-Disposition"] so the React frontend can read filenames for downloads.
+
+Ticket 5: Write Custom FastAPI Audit Middleware
+Intercept all requests and log the following to stdout/logger: Timestamp, User ID (extracted from JWT if present), Path, HTTP Method, IP Address, Status Code, User-Agent.
+
+Ticket 6: Setup Cryptography & JWT Engines
+Set up argon2-cffi for Argon2id password hashing and verification.
+Build functions using PyJWT to encode/decode standard access tokens (exp: 24 hours) and short-lived setup tokens (exp: 15 mins) using HS256 and the environment SECRET_KEY.
+
+Task: Setup Global Pydantic Schemas (The API Contract) (UPDATED)
+Directory: src/schemas/
+Dependencies: pydantic (V2)
+1. Architectural Constraint (Strict Mode)
+All Pydantic models must use model_config = ConfigDict(from_attributes=True) so they can seamlessly translate SQLAlchemy ORM objects into JSON. Absolutely no database internal fields (like password_hash or deleted_at) should ever exist in a response model.
+2. Core Shared Models (src/schemas/common.py)
+Create the base models that will be nested inside other responses.
+RoleContext Model:
+role: str
+school_id: UUID
+school_name: str
+is_verified: bool | None = None (Used strictly for Parent KBA)
+UserBase Model:
+id: UUID
+first_name: str
+middle_name: str | None
+last_name: str
+email: str | None
+username: str | None
+is_superadmin: bool
+3. Auth & Session Models (src/schemas/auth.py)
+Define the exact payloads for data entering and leaving the gateway.
+SignInRequest:
+signin_credential: str (Validates email or username)
+password: str
+SetupPasswordRequest:
+new_password: str (Min length: 8, requires >= 1 letter and >= 1 number)
+VerifyParentRequest:
+student_username: str
+SessionResponse (The Master Hydrator):
+status: str
+requires_password_change: bool
+user: UserBase
+contexts: list[RoleContext]
+The Developer Implementation Code (Pydantic V2)
+It uses Pydantic V2's optimized Field constraints for the length, and a custom @field_validator for the alphanumeric check, ensuring the frontend gets highly specific error messages.
+Python
+from pydantic import BaseModel, Field, field_validator
+import re
+
+class SetupPasswordRequest(BaseModel):
+    # Field automatically enforces the 8-character minimum
+    new_password: str = Field(min_length=8)
+
+    @field_validator('new_password')
+    @classmethod
+    def validate_password_complexity(cls, v: str) -> str:
+        if not re.search(r'[a-zA-Z]', v):
+            raise ValueError('Password must contain at least one letter.')
+        if not re.search(r'\d', v):
+            raise ValueError('Password must contain at least one number.')
+        return v
+4. Provisioning Models (src/schemas/superadmin.py & src/schemas/admin.py)
+Platform Level (src/schemas/superadmin.py)
+RegisterSchoolRequest:
+school_name: str
+school_suburb: str
+admin_email: EmailStr
+admin_first_name: str
+admin_middle_name: str | None = None (Optional)
+admin_last_name: str
+RegisterSchoolResponse:
+status: str
+school_id: UUID
+temp_password: str
+Tenant Level (src/schemas/admin.py)
+(Note for Developers: The POST /onboard endpoint uses multipart/form-data for Excel files, so it relies on FastAPI UploadFile rather than a Pydantic Request model. However, any JSON responses or future Admin-specific API models go here).
+OnboardingAuditResponse:
+status: str
+timestamp: datetime
+
+Authentication & Identity APIs
+
+Ticket 7: Build POST /api/v1/auth/signin (Universal Gateway API) (UPDATED)
+Validation: Accept JSON {"signin_credential": "...", "password": "..."}. Query users where email == signin_credential OR username == signin_credential. If not found or Argon2 fails, return 401: "Invalid credentials. Please try again."
+Context Building: Query user_school_roles joined with schools for this user.id to build the contexts array.
+Parent Check: If a returned role is PARENT, query student_parent_associations to determine if is_verified is true/false.
+Happy Path A (Force Reset): If requires_password_change == True:
+Issue setup_token via HttpOnly cookie (max_age=900, samesite="lax", secure=IS_PRODUCTION). Payload: {"sub": str(user.id), "type": "setup_token"}.
+Return 200 OK. Body: {"status": "SUCCESS", "requires_password_change": true}.
+Happy Path B (Normal signin):
+If requires_password_change == False: Update last_signin_at.
+Issue standard access_token via HttpOnly cookie (max_age=86400). Payload: {"sub": str(user.id), "type": "access"}.
+Return 200 OK. Body MUST perfectly match frontend Zustand store:
+JSON
+{
+  "status": "SUCCESS", "requires_password_change": false,
+  "user": { "id": "<uuid>", "first_name": "...", "middle_name": "...", "last_name": "...", "email": "...", "username": "...", "pronouns": "...", "is_superadmin": false },
+  "contexts": [
+    { "role": "ADMIN", "school_id": "<uuid>", "school_name": "School A" },
+    { "role": "PARENT", "school_id": "<uuid>", "school_name": "School B", "is_verified": false }
+  ]
+}
+
+Ticket 8: Build POST /api/v1/auth/setup-password (UPDATED)
+Cookie Extraction & Validation: Extract token from access_token HttpOnly cookie. Decode via PyJWT. If expired/invalid, or if payload["type"] != "setup_token", return 401.
+User Fetch: Extract sub claim. Query users. If not found, return 401. Assign to current_user.
+Payload & Validation: Accept the JSON payload strictly via the SetupPasswordRequest Pydantic model. (Note to Developer: Do not write manual length/complexity checks here. The Pydantic V2 schema automatically handles 422 rejections for length and alphanumeric requirements).
+Database Update: Hash new_password. Update users: set password_hash, requires_password_change = False, last_signin_at = CURRENT_TIMESTAMP, password_updated_at = CURRENT_TIMESTAMP.
+Happy Path (Issue Standard Session):
+Issue standard access_token (type: access) via HttpOnly cookie, overwriting the setup token.
+Rebuild the contexts array exactly like the Signin endpoint.
+Return 200 OK with the exact same JSON body shape as Ticket 7 Happy Path B.
+
+Ticket 9: Build GET /api/v1/users/me (The Session Hydrator)
+Auth Guard: Extract JWT from access_token cookie. Decode. If expired/invalid, or payload["type"] != "access": construct a deletion header (Set-Cookie: access_token=""; Max-Age=0...) and raise 401.
+DB Query: Extract sub claim. Query users where id == sub AND deleted_at IS NULL. Raise 401 (with cookie deletion header) if missing.
+Happy Path: Rebuild the contexts array from user_school_roles. Return 200 OK. The JSON body MUST identically match the Ticket 7 Happy Path B response structure.
+
+Ticket 10: Build POST /api/v1/auth/logout
+Dependency: Accept request.cookies.
+Action: Execute Response.delete_cookie("access_token", httponly=True, secure=IS_PRODUCTION, samesite="lax").
+Response: Return 200 OK. Body: {"message": "Successfully logged out"}.
+
+Ticket 11: Build POST /api/v1/auth/verify-parent
+Validation: Extract JWT from access_token HttpOnly cookie. Extract parent_id from token subject. Accept JSON body: {"student_username": "string"}.
+The Junction Verification:
+Query users for the student where username == student_username.
+Query student_parent_associations where parent_id == parent_id AND student_id == student.id.
+Unhappy Path: If student not found or association doesn't exist, return 400: "Invalid student username."
+The Core Action:
+Update student_parent_associations: Set is_verified = True, verified_at = CURRENT_TIMESTAMP.
+Return 200 OK. {"status": "SUCCESS", "message": "Parent access verified."}
+
+Provisioning & Multi-Tenant Routing
+
+Ticket 12: Build POST /api/v1/superadmin/register-school (UPDATED)
+Objective: Allow a platform Superadmin to register a new school, provision its first Administrator, and set its inaugural academic calendar in a single atomic action.
+1. Security Guard
+Extract JWT from the access_token HttpOnly cookie.
+Decode and verify current_user.is_superadmin == True.
+Unhappy Path: If the token is missing, invalid, or the user is not a Superadmin, immediately return 403 Forbidden.
+2. Payload (The API Contract)
+Accept a JSON body strictly validated by the RegisterSchoolRequest Pydantic model:
+JSON
+{"school_name": "Springfield High", "school_suburb": "Springfield", "admin_email": "askinner@springfield.edu", "admin_first_name": "Arthur", "admin_middle_name": null, "admin_last_name": "Skinner", "academic_session_name": "2026-2027", "academic_session_start_date": "2026-08-01", "academic_session_end_date": "2027-06-30"}
+3. The Atomic Bootstrap (Database Transaction)
+Open a single database transaction using session.begin(). Execute the following sequentially, ensuring the Superadmin's ID is stamped across the entire tenant creation:
+Step 1 (The Tenant): Insert into the schools table (name, suburb, created_by: current_user.id). Retain the generated school_id.
+Step 2 (The Identity): Generate an 8-character random alphanumeric string (temp_password). Hash it using Argon2. Insert into the users table:
+email: admin_email
+first_name, middle_name, last_name
+requires_password_change: True
+password_hash: <Argon2_Hash>
+created_by: current_user.id
+Retain the generated user.id.
+Step 3 (The Junction Link): Insert into the user_school_roles table:
+user_id: <Step 2 ID>
+school_id: <Step 1 ID>
+role: 'ADMIN'
+created_by: current_user.id
+Step 4 (The Day Zero Calendar): Insert into the academic_sessions table:
+school_id: <Step 1 ID>
+name: academic_session_name
+start_date: academic_session_start_date
+end_date: academic_session_end_date
+is_active: True
+created_by: current_user.id
+4. Error Handling (Unhappy Paths)
+Wrap the transaction in a try/except block catching SQLAlchemy IntegrityError (e.g., if the admin_email already exists in the database).
+If caught, execute session.rollback() and return 400 Bad Request: "A user with this email already exists or tenant data is invalid."
+5. Success Response
+Execute session.commit(). Return 201 Created.
+JSON
+{"status": "SUCCESS", "school_id": "<uuid>", "temp_password": "<plain-text-temp-password>"}
+
+Ticket 13: Build POST /api/v1/admin/schools/{school_id}/onboard (UPDATED AZURE UPLOAD ARCHITECTURE)
+1. Authorization, Tenant Guard & Telemetry
+Dependency: Extract JWT from access_token HttpOnly cookie.
+Tenant Guard: Query user_school_roles to verify current_user.id has an ADMIN role for path.school_id. Return 403 if false.
+Payload: Accept a single .xlsx file. The frontend must append this file to the multipart/form-data payload using the exact form-field key: master_file. The backend will accept any user-generated filename, provided the form-field key matches and the extension is valid. Read into a single Pandas DataFrame (master_df).
+Telemetry (NEW): Extract client_ip = request.client.host and client_ua = request.headers.get("User-Agent") for the upcoming action token generation.
+2. Data Sanitization & Strict Column Enforcement
+Clean all string columns in the DataFrame by stripping leading and trailing whitespace (e.g., master_df['teacher_email'].str.strip()) to prevent invisible character mismatch errors. Replace all Pandas NaN or NaT values with Python None.
+Enforce strict expected columns (Reject if missing): year_level, class, teacher_honorifics, teacher_first_name, teacher_middle_name, teacher_last_name, teacher_email, student_first_name, student_middle_name, student_last_name, student_dob, student_gender (MUST map to Enum: MALE, FEMALE, NON_BINARY, PREFER_NOT_TO_SAY), student_pronouns, parent_first_name, parent_middle_name, parent_last_name, parent_email.
+3. Infrastructure Preparation
+Open a single atomic SQLAlchemy transaction: session.begin().
+Session Fetch: Query the academic_sessions table where school_id == path.school_id AND is_active == True. (If missing, rollback and return 400: "No active academic session found for this school"). Assign to active_session_id.
+4. Phase 1: The Infrastructure Slice (Teachers & Classes)
+The Slice: Create teacher_df = master_df[['year_level', 'class', 'teacher_honorifics', 'teacher_first_name', 'teacher_middle_name', 'teacher_last_name', 'teacher_email']].
+Execute teacher_df.drop_duplicates(subset=['teacher_email', 'year_level', 'class'], inplace=True).
+The Smart Merge (Teachers): Extract all teacher_email values. Query the users table for these emails and store them in memory.
+Iterate through teacher_df:
+User Logic:
+If NEW: Generate/hash 8-char temp_password. Create users record (email, honorifics, first_name, middle_name, last_name, requires_password_change=True). Retain plain-text password in mapping.
+If EXISTS: Retrieve user.id. Retain [Existing Account - No Setup Required] in mapping.
+Role Logic: Insert into user_school_roles (user_id, school_id, role='TEACHER'). Ignore if this specific link already exists.
+Year Level Logic: Query year_levels (by name/school_id). If not found, create it. Assign resolved_year_level_id.
+Class Logic: Query classes (by name, resolved_year_level_id, school_id, session_id: active_session_id). If not found, create it. Assign resolved_class_id.
+Association Logic: Insert into teacher_class_associations (teacher_id, class_id).
+Memory Cache: Save a dictionary mapping f"{year_level}_{class}" to the newly created class_id.
+5. Phase 2: The Guardian Slice (Parents)
+The Slice: Create parent_df = master_df[['parent_first_name', 'parent_middle_name', 'parent_last_name', 'parent_email']].
+Execute parent_df.drop_duplicates(subset=['parent_email'], inplace=True).
+The Smart Merge (Parents): Bulk query all parent_email values from the users table. Map to memory.
+Iterate through parent_df:
+User Logic:
+Skip row entirely if parent_email is None.
+If NEW: Generate/hash temp_password. Create users record (email, first_name, middle_name, last_name, requires_password_change=True). Retain plain-text password map.
+If EXISTS: Retrieve user.id. Retain [Existing Account].
+Role Logic: Insert into user_school_roles (user_id, school_id, role='PARENT').
+Memory Cache: Save a dictionary mapping parent_email to the user.id.
+6. Phase 3: The Enrollment Slice (Students & Links)
+Iterate through the full master_df row by row:
+Empty Class Rule: If student_first_name is None, continue (skip row).
+Student Logic:
+Generate base username (first_name_last_name lowercase, replace spaces). Query users to ensure uniqueness; append iterating integer if collision occurs (e.g., john_doe_1).
+Parse student_dob (pd.to_datetime). Generate/hash temp_password.
+Create users record (username, first_name, middle_name, last_name, dob, gender, pronouns, requires_password_change=True). Retain password map.
+Insert into user_school_roles (user_id, school_id, role='STUDENT').
+Student Class Link: Lookup class_id from Phase 1 cache using f"{year_level}_{class}". Insert into student_class_associations (student_id, class_id, enrollment_status='ACTIVE', enrolled_at=CURRENT_TIMESTAMP).
+Parent/Student Link: Lookup parent_id from Phase 2 cache using parent_email. Insert into student_parent_associations (student_id, parent_id, is_verified=False).
+7. Phase 4: Success, Excel Generation & Cloud Handoff (AZURE)
+Execute session.commit(). (The infrastructure is now physically saved).
+Excel Generation: Use Pandas and io.BytesIO() to generate a single in-memory .xlsx workbook mapping the stored passwords/existing flags to three sheets: Teachers, Parents, Students.
+Token Creation: Generate a 32-byte CSPRNG secure string (e.g., import secrets; token_string = secrets.token_urlsafe(32)).
+The Coat Check (Insert Token): Insert a row into the action_tokens table:
+token: token_string
+token_type: 'CREDENTIALS_DOWNLOAD'
+school_id: path.school_id
+user_id: current_user.id
+expires_at: CURRENT_TIMESTAMP + 15 minutes
+created_ip_address: client_ip
+created_user_agent: client_ua
+Execute session.commit() again to save the token.
+The Azure Upload (The Implementation Detail): Use the Azure Storage SDK to upload the buffer. You MUST apply the ContentSettings object during the upload to force the silent download rule on the frontend.
+from azure.storage.blob import BlobServiceClient, ContentSettings
+import os
+
+# 1. Connect to Azure or Azurite via environment variable
+connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
+blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+
+# 2. Define the exact path
+container_name = os.getenv("AZURE_CONTAINER_NAME", "wellbeing-buddy-core")
+blob_name = f"onboarding_exports/{token_string}.xlsx"
+blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+
+# 3. Enforce the CRITICAL BROWSER RULE (Content-Disposition)
+safe_school_name = school_name.replace(' ', '_')
+my_content_settings = ContentSettings(
+    content_disposition=f'attachment; filename="{safe_school_name}_Setup_Credentials.xlsx"'
+)
+
+# 4. Upload the in-memory buffer to Cloud Storage
+excel_buffer.seek(0) # Ensure the buffer is at the beginning before reading
+blob_client.upload_blob(
+    excel_buffer, 
+    overwrite=True, 
+    content_settings=my_content_settings
+)
+
+Response: Return 200 OK.
+JSON
+{
+  "status": "processed", 
+  "message": "School Infrastructure created successfully. Ready for compliance signature.",
+  "token": "<token_string>"
+}
+
+Ticket 14: Build Build POST /api/v1/admin/schools/{school_id}/onboarding-audit (Compliance Vault & Release) (UPDATED)
+Objective: Accept the legal liability signature, permanently record the data exfiltration in the audit logs, consume the action token, and release a short-lived presigned URL for the actual file download.
+1. Authorization & Input Validation
+Guard: Extract JWT from access_token HttpOnly cookie. Query user_school_roles to verify current_user.id has an active ADMIN role for path.school_id. (Return 403 Forbidden if false).
+Payload: Accept JSON body: {"token": "string"}.
+Telemetry: Extract client_ip = request.client.host and client_ua = request.headers.get("User-Agent").
+2. The Double-Lock Verification
+Fetch Agreement: Query legal_agreements where agreement_type = 'CREDENTIAL_DISTRIBUTION_LIABILITY' and is_active = True. Retain the legal_agreement_id. (Raise 500 Internal Server Error if missing).
+Token Check: Query action_tokens where token == payload.token.
+Raise 403 Forbidden if:
+The token does not exist.
+token.user_id != current_user.id.
+CURRENT_TIMESTAMP > token.expires_at.
+token.consumed_at IS NOT NULL.
+3. The Atomic Compliance Vault (Database Transaction)
+Open a single atomic transaction: session.begin().
+Step 1 (The Signature): Insert into user_consents:
+user_id: current_user.id
+legal_agreement_id: <from_step_2>
+ip_address: client_ip
+user_agent: client_ua
+(Let the BaseMixin handle created_at, which acts as the acceptance timestamp)
+Step 2 (The Audit Trail): Insert into audit_logs:
+actor_id: current_user.id
+school_id: path.school_id
+action: 'EXPORTED'
+entity_type: 'USER_CONSENT'
+entity_id: <new_user_consent_id_from_step_1>
+details: {"action": "Exported plain-text setup credentials locally", "token_used": "<payload.token>"}
+ip_address: client_ip
+user_agent: client_ua
+Step 3 (Consume Token): Update the action_tokens row:
+consumed_at: CURRENT_TIMESTAMP
+consumed_ip_address: client_ip
+consumed_user_agent: client_ua
+Execute session.commit().
+4. The Azure SAS URL Release (The Implementation Detail)
+Use the Azure Storage SDK to dynamically generate a Read-Only Presigned URL. Use the environment variable to ensure seamless routing between the local Azurite emulator and Production Azure.
+Python
+from azure.storage.blob import BlobServiceClient, generate_blob_sas, BlobSasPermissions
+from datetime import datetime, timedelta, timezone
+import os
+
+# 1. Connect to Azure or Azurite via environment variable
+connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
+blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+
+# 2. Define the exact path
+container_name = os.getenv("AZURE_CONTAINER_NAME", "wellbeing-buddy-core")
+blob_name = f"onboarding_exports/{payload.token}.xlsx"
+
+# 3. Generate the 60-second SAS token
+sas_token = generate_blob_sas(
+    account_name=blob_service_client.account_name,
+    account_key=blob_service_client.credential.account_key,
+    container_name=container_name,
+    blob_name=blob_name,
+    permission=BlobSasPermissions(read=True),
+    expiry=datetime.now(timezone.utc) + timedelta(seconds=60)
+)
+
+# 4. Construct the final URL
+blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+download_url = f"{blob_client.url}?{sas_token}"
+5. Response
+Return 200 OK.
+JSON
+{
+  "status": "liability_acknowledged",
+  "timestamp": "<UTC_time>",
+  "download_url": "<download_url>"
+}
+
+Ticket 15: Build GET /api/v1/schools/{school_id}/teachers/me/classes (UPDATED)
+Trigger: Fires when the designated frontend component for teachers mounts.
+
+Validation: Require JWT. Ensure user.id has an active TEACHER role for {school_id} in user_school_roles.
+
+Database Action: Query teacher_class_associations joined with classes and year_levels for this user.id. Add a COUNT aggregation for enrolled students in each class.
+
+Response:
+
+JSON
+{
+  "classes": [
+    { "class_id": "<uuid>", "class_name": "6-A", "year_level": "Year 6", "student_count": 28 },
+    { "class_id": "<uuid>", "class_name": "6-B", "year_level": "Year 6", "student_count": 25 }
+  ]
+}
+
+Ticket 16: Build GET /api/v1/schools/{school_id}/students/me/academic-profile (UPDATED)
+Trigger: Fires when the designated frontend component for students mounts.
+
+Validation: Require JWT. Ensure user.id has an active STUDENT role for {school_id}.
+
+Database Action: Query student_class_associations joined with classes and year_levels for this user.id where enrollment_status == 'ACTIVE'. Join teacher_class_associations and users to grab the teacher's details.
+
+Response:
+
+JSON
+{
+  "class_id": "<uuid>",
+  "class_name": "10-C",
+  "year_level": "Year 10",
+  "teacher_honorifics": "Mr.",
+  "teacher_first_name": "John",
+  "teacher_last_name": "Smith"
+}
+
+Ticket 17: Build GET /api/v1/schools/{school_id}/parents/me/children (UPDATED)
+Trigger: Fires when the designated frontend component for parents mounts.
+
+Validation: Require JWT. Ensure user.id has an active PARENT role for {school_id} AND is_verified == True.
+
+Database Action: Query student_parent_associations joined with users (to get child names) and student_class_associations (to get their classes) for this parent_id. (Dev Warning: middle_name can be null. Ensure UI concatenation logic handles it safely).
+
+Response:
+
+JSON
+{
+  "children": [
+    { 
+      "student_id": "<uuid>", 
+      "first_name": "Tommy", 
+      "middle_name": "Jane", 
+      "last_name": "Smith", 
+      "year_level": "Year 4",
+      "class_name": "4-A" 
+    },
+    { 
+      "student_id": "<uuid>", 
+      "first_name": "Sarah", 
+      "middle_name": null, 
+      "last_name": "Smith", 
+      "year_level": "Year 6",
+      "class_name": "6-B" 
+    }
+  ]
+}
+
+Ticket 18: Add Local Azure Emulator (DevOps)
+Objective: Provide a pristine, offline local cloud environment for developers without using production credentials.
+Add azure-storage-blob to the project dependencies (e.g., requirements.txt or pyproject.toml).
+Create a docker-compose.yml in the project root:
+YAML
+services:
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    hostname: azurite
+    ports:
+      - "10000:10000"
+    command: "azurite-blob --blobHost 0.0.0.0 --blobPort 10000"
+Update the .env.example file to include: AZURE_STORAGE_CONNECTION_STRING="UseDevelopmentStorage=true" and AZURE_CONTAINER_NAME="wellbeing-buddy-core".

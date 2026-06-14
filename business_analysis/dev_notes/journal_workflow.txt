@@ -1,0 +1,49 @@
+[ Student Writes Journal Entry ]
+           │
+           ▼
+[ Student Clicks Submit Button ]
+           │
+           ▼
+ [ POST /api/v1/journal/entries ]
+           │
+           ▼
+┌───────────────────────────────────┐
+│    Model 4 Interceptor (Text)     │
+└───────────────────────────────────┘
+           │
+           ├──► (YES: Crisis Detected) ──► [ SILENT CRISIS PROTOCOL ]
+           │                                           │
+           │                                           ▼
+           │                                [ Fire SSE Alert to Adults ]
+           │                                [ Save Entry as Isolated Audit Record ]
+           │                                [ Suppress Standard Model 3 Scoring ]
+           │                                [ UI: Displays Standard "Entry Saved" ]
+           │                                           │
+           │                                           ▼
+           │                                  ([ Return to Dashboard ])
+           │
+           └──► (NO: Text is Safe)
+                       │
+                       ▼
+         [ Save Entry to PostgreSQL Standard Ledger ]
+                       │
+                       ▼
+         [ UI: Displays Standard "Entry Saved" ] ──► ([ Return to Dashboard ])
+                       │
+                       ▼
+         [ Push Raw Text Block to Background Queue ]
+                       │
+                       ▼
+         [ Model 3: Semantic Scorer (Few-Shot Prompting) ]
+                       │
+                       ▼
+         [ Extract Themes & Calculate 0-50 Dimension Shifts ]
+                       │
+                       ▼
+         [ Apply Temporal Decay & Age-Based Weighting Math ]
+                       │
+                       ▼
+         [ Update Parent/Teacher Dashboard Analytics View ]
+                       │
+                       ▼
+                     ([ Done ])

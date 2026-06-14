@@ -1,0 +1,135 @@
+{
+  "user_wellbeing":
+  {
+    "user_id": "13456789012345678901",	
+    "session_id": "sess_20260609_160000_abc123",	
+    "safety_flag": {"value": false, "unsafe_converstaion": null, "safety_flag_reason": null, "safety_flag_timestamp": null},
+    "login_timestamp": "2026-06-09T16:00:00+10:00",
+    "current_mood": 3
+    "wellbeing_signals":
+    {
+      "wellbeing_dim1": {"name": "mental", "intensity": null, "confidence": null, "frequency": null},
+      "wellbeing_dim2": {"name": "physical", "intensity": null, "confidence": null, "frequency": null},
+      "wellbeing_dim3": {"name": "connection", "intensity": null, "confidence": null, "frequency": null},
+      "wellbeing_dim4": {"name": "safety", "intensity": null, "confidence": null, "frequency": null},
+      "wellbeing_dim5": {"name": "resilience", "intensity": null, "confidence": null, "frequency": null},
+      "wellbeing_dim6": {"name": "purpose", "intensity": null, "confidence": null, "frequency": null},
+      "wellbeing_dim7": {"name": "inclusivity", "intensity": null, "confidence": null, "frequency": null},
+      "wellbeing_dim8": {"name": "philosophy", "intensity": null, "confidence": null, "frequency": null}
+    }
+  }
+}
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+References- 
+1. current_mood scales from 1 to 5. 1 = very sad, 2 = sad, 3 = neutral, 4 = happy, 5 = very happy
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Elo bot: Hey Sam! Ready for your check-in?
+Child: taps Start.
+Elo bot: How are you feeling today? Options: 😄 🙂 😐 😕 😢
+Child selects: any 1 option. e.g. - "😄"
+Elo bot: Empathizes and asks a follow up question around the reason for the selected mood. e.g. - "Nice 🙂! What made today feel that way?"
+Child: Played soccer.
+Elo bot: Does the following:
+       1. Tries to understand which wellbeing_dim(s) the child is talking about.
+       2. Phrases an empathizing dialogue
+       3. Asks a question to measure the intensity of the most prominent wellbeing_dim(s) that was perceived from the child's previous response.
+       Question: e.g.- Love that ⚽. Did you move your body much today?. Options: A lot/ Somewhat / A bit / Not really/ Not at all
+Child: Replies by selecting an option from above. e.g. - "Somewhat"
+Elo bot: Does the following:
+       1. Measures the intensity of the most prominent wellbeing_dim(s) that was perceived from the child's response and updates the "user_wellbeing"."wellbeing_signals" JSON.
+          e.g.- "wellbeing_dim2": {"name": "physical", "intensity": 23, "confidence": 0.95, "frequency": 30}
+       2. If {"wellbeing_dim2"."frequency": null}
+             phrases a follow up question around "wellbeing_dim2"."frequency"
+             (e.g. - How often do you play ⚽?
+             Dropdown Options: daily/ weekly 3-4 times/ weekly once/ rarely/ almost never)
+          else
+             phrases a follow up question to confirm and update the existing reading of "wellbeing_dim2"."frequency"
+             (e.g. - Are you still playing ⚽ often?
+             Dropdown Options: daily/ weekly 3-4 times (Preselected during the last time "wellbeing_dim2"."frequency" was updated)/ weekly once/ rarely / almost never)
+Child: Replies by selecting an option from above. e.g. - "rarely"
+
+(UX question: How does the chat closes??? Hardcoded or LLM affirms closing note?)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Elo bot: Asks a question on another wellbeing_dim from the roster of 8 (randomly / fixed day-to-day rotation / longest time elapsed since the last visited dimension / pick up the nuance from last conversation and choose the most relevant one).
+e.g. - In last few days, who do you spend most time with? ("wellbeing_dim3" = "connection")
+Options: Family/ Classmates/ One Friend/ On My Own/ I struggle to mingle
+Child: Replies by selecting an option from above. e.g. - "One friend"
+Elo bot: Does the following:
+       1. If {"wellbeing_dim3"."frequency": null}
+             phrases a follow up question around "wellbeing_dim3"."frequency"
+             (e.g. - Great! How often do you spend time together?
+             Dropdown Options: daily (Preselected???)/ weekly 3-4 times/ weekly once/ rarely/ almost never)
+          else
+             phrases a follow up question to confirm and update the existing reading of "wellbeing_dim3"."frequency"
+             (e.g. - Are you still  spending time with your friend daily?
+             Dropdown Options: daily (Preselected)/ weekly 3-4 times/ weekly once/ rarely (New Selection???)/ almost never)
+Child: Replies by selecting an option from above. e.g. - "Daily???"
+
+(UX question: How does the chat closes??? Hardcoded or LLM affirms closing note?)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+{
+  "student_identity": {
+    "name_token": "{{STUDENT_NAME}}", 
+    "age": 11,
+    "year_level": "Year 6"
+  },
+  "temporal_context": {
+    "local_time": "08:15 AM",
+    "day_of_week": "Friday",
+    "is_school_day": true,
+    "day_attributes": [
+      "weekday"
+    ], 
+    "active_check_in_dimensions": [
+      "Sleep", 
+      "Mental"
+    ]
+  },
+  "well8_quantitative_state": {
+    "current_overall_score": 284,
+    "rolling_dimension_averages": {
+      "mental": 32,
+      "physical": 40,
+      "connection": 28,
+      "safety": 45,
+      "resilience": 34,
+      "purpose": 38,
+      "inclusivity": 35,
+      "philosophy": 32
+    },
+    "critical_flags": [] 
+  },
+  "semantic_state": {
+    "recent_extracted_themes": [
+      "Struggling to fall asleep lately", 
+      "Nervous about Friday science presentation"
+    ],
+    "days_since_last_interaction": 1,
+    "last_interaction_type": "one_way_silent_journal"
+  },
+  "tri_source_context": {
+    "recent_teacher_note_summary": "No recent notes logged.",
+    "recent_parent_note_summary": "No recent notes logged."
+  },
+  "conversational_guardrails": {
+    "max_follow_up_depth": 3,
+    "current_turn_in_session": 1,
+    "current_interaction_type": "guided_check_in_session" 
+  }
+}

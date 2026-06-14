@@ -1,0 +1,9 @@
+Manually INSERT into the users table:
+role: "SUPERADMIN"
+email: "someone@somemail.com" (or your specific email)
+password_hash: <the-hash>
+first_name: "System"
+last_name: "Administrator"
+requires_password_change: False (Since we are setting it manually)
+created_by: NULL (Because God has no creator!)
+created_at: Timestamp

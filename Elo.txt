@@ -1,0 +1,598 @@
+We are designing the Wellbeing Buddy Elo Bot MVP
+Our final decision - We are considering students withing 10-13 Years age group only.
+Year 5 primary school - Age ~10 Years
+Year 6 primary school - Age ~11 Years
+Year 7 high school - Age ~12 Years
+Year 8 high school - Age ~13 Years
+
+Following are the 8 dimensions of wellbeing and the respective wellbeing questions:
+PURPOSE (Sense of Worth)
+1.What gives your life meaning right now? 
+- Follow-up: How meaningful does it feel to you?
+- Follow-up: How often do you think about what gives your life meaning?
+2.What are you working towards or hoping to achieve? 
+- Follow-up: How important is this goal to you?
+- Follow-up: How often do you work on it?
+3.What activities make you feel most like yourself? 
+- Follow-up: How strongly do you feel like yourself during these?
+- Follow-up: How many times a week do you get to do these activities?
+4.When do you feel like what you do matters? 
+- Follow-up: How much do you feel like you matter?
+- Follow-up: How often do you feel this way?
+5.What do you think you're here to do or become? 
+- Follow-up: How clear are you about your purpose?
+- Follow-up: How often do you think about this?
+6.What contributions do you make that you're proud of? 
+- Follow-up: How proud are you of these contributions?
+- Follow-up: How often do you contribute in ways that matter to you?
+7.What motivates you to get up in the morning? 
+- Follow-up: How motivated do you feel?
+- Follow-up: How many mornings a week do you feel motivated?
+8.How do you want people to remember you? 
+- Follow-up: How important is this to you?
+- Follow-up: How often do you think about your impact?
+9.Do you feel like your life has direction? 
+- Follow-up: How clear is that direction?
+- Follow-up: How often do you feel you're moving in the right direction?
+10.What makes you feel valuable? 
+- Follow-up: How valuable do you feel?
+- Follow-up: How often do you feel valued?
+11.Are you working on something that matters to you? 
+- Follow-up: How much does it matter?
+- Follow-up: How many hours a week do you spend on it?
+12.Do you feel like you have something to offer the world? 
+- Follow-up: How strongly do you feel this?
+- Follow-up: How often do you think about what you can offer?
+13.What are you passionate about? 
+- Follow-up: How passionate are you about it?
+- Follow-up: How often do you engage with your passion?
+14.Do you feel like you're growing as a person? 
+- Follow-up: How much growth do you feel?
+- Follow-up: How often do you notice yourself changing?
+15.What impact do you want to have? 
+- Follow-up: How important is making an impact to you?
+Follow-up: How often do you think about your impact?
+16.Do your daily activities align with what matters to you? 
+- Follow-up: How well do they align?
+- Follow-up: How many days a week do you feel aligned?
+PHYSICAL (Nutrition, Exercise, Lifestyle)
+1.How would you describe your eating habits lately? 
+Follow-up: How healthy would you rate your eating?
+Follow-up: How many balanced meals do you eat per day?
+2.Are you getting enough physical activity these days? 
+Follow-up: How active do you feel you are?
+Follow-up: How many days a week are you physically active?
+3.How's your sleep been - getting enough rest? 
+Follow-up: How many hours of sleep are you getting?
+Follow-up: How rested do you feel when you wake up?
+4.How do you feel about your body right now? 
+Follow-up: How comfortable are you with your body?
+Follow-up: How often do you think about your body image?
+5.What's your energy level like throughout the day? 
+Follow-up: How would you rate your energy on a scale of 1-10?
+Follow-up: How often do you feel energized versus drained?
+6.Are you taking care of your body in ways that feel good? 
+Follow-up: How well are you taking care of yourself?
+Follow-up: How many healthy habits do you practice regularly?
+7.Do you feel healthy overall? 
+Follow-up: How healthy do you feel on a scale of 1-10?
+Follow-up: How often do you feel physically well?
+8.Is there anything about your physical health that concerns you? 
+Follow-up: How concerned are you about it?
+Follow-up: How often does this concern come up?
+9.How's your relationship with food? 
+Follow-up: How comfortable do you feel around food?
+Follow-up: How often do you think about what you eat?
+10.Are you maintaining a balanced lifestyle? 
+Follow-up: How balanced does your lifestyle feel?
+Follow-up: How many areas of health are you managing well?
+11.Do you experience physical pain or discomfort regularly? 
+Follow-up: How intense is the pain?
+Follow-up: How many days a week do you experience this?
+12.How much time do you spend on screens daily? 
+Follow-up: How many hours would you estimate?
+Follow-up: How often do you take breaks from screens?
+13.Are you satisfied with your physical fitness level? 
+Follow-up: How satisfied are you?
+Follow-up: How often do you work on your fitness?
+14.Do you feel physically strong? 
+Follow-up: How strong do you feel?
+Follow-up: How often do you do activities that build strength?
+15.How's your hygiene and self-care routine? 
+Follow-up: How consistent is your routine?
+Follow-up: How many self-care practices do you do daily?
+16.Are you drinking enough water? 
+Follow-up: How much water do you drink daily?
+Follow-up: How often do you remember to stay hydrated?
+MENTAL (Navigation, Anxiety & Uncertainty)
+1.How's your mental health been recently? 
+Follow-up: How would you rate it on a scale of 1-10?
+Follow-up: How many days this week have been good mental health days?
+2.What's causing you stress or anxiety right now? 
+Follow-up: How stressful or anxious does it make you feel?
+Follow-up: How often do you feel stressed about this?
+3.How are you processing uncertainty about your future? 
+Follow-up: How uncertain do you feel?
+Follow-up: How often does uncertainty bother you?
+4.How would you describe your emotional state lately? 
+Follow-up: How stable or unstable do your emotions feel?
+Follow-up: How many mood shifts do you experience in a day?
+5.What mental health challenges are you navigating? 
+Follow-up: How challenging are they?
+Follow-up: How often do these challenges affect your daily life?
+6.Do you have effective ways to manage difficult emotions? 
+Follow-up: How effective are your coping strategies?
+Follow-up: How often do you use them?
+7.How's your capacity to cope with what life's throwing at you? 
+Follow-up: How well are you coping?
+Follow-up: How often do you feel overwhelmed?
+8.Are you experiencing any symptoms of depression or anxiety? 
+Follow-up: How severe are these symptoms?
+Follow-up: How many days a week do you experience them?
+9.How well can you focus and concentrate? 
+Follow-up: How strong is your focus?
+Follow-up: How often do you struggle to concentrate?
+10.Do you feel emotionally balanced? 
+Follow-up: How balanced do you feel?
+Follow-up: How many times a week do you feel unbalanced?
+11.How are you handling pressure from school or activities? 
+Follow-up: How much pressure do you feel?
+Follow-up: How often does the pressure feel like too much?
+12.Are you able to express your emotions? 
+Follow-up: How easily can you express them?
+Follow-up: How often do you keep emotions bottled up?
+13.Do you experience mood swings? 
+Follow-up: How intense are the mood swings?
+Follow-up: How many times a day/week do they happen?
+14.How hopeful do you feel about things? 
+Follow-up: How strong is that sense of hope?
+Follow-up: How often do you feel hopeful versus hopeless?
+15.Are intrusive or negative thoughts affecting you? 
+Follow-up: How much do they affect you?
+Follow-up: How often do you have these thoughts?
+16.Can you calm yourself when you're upset? 
+Follow-up: How well can you calm yourself?
+Follow-up: How long does it usually take?
+SAFETY (Boundaries and Personal Space)
+1.Do you feel physically and emotionally safe in your environment? 
+Follow-up: How safe do you feel on a scale of 1-10?
+Follow-up: How often do you feel safe?
+2.Are your boundaries being respected by others? 
+Follow-up: How well are they being respected?
+Follow-up: How often are your boundaries crossed?
+3.Have you experienced any form of harassment or abuse? 
+Follow-up: How severe was it?
+Follow-up: How often has this happened?
+4.Do you feel secure enough to express yourself authentically? 
+Follow-up: How secure do you feel?
+Follow-up: How often can you be authentic?
+5.How safe do you feel online and on social media? 
+Follow-up: How safe do you rate it?
+Follow-up: How often do you feel unsafe online?
+6.Can you protect your mental space and say no when needed? 
+Follow-up: How easy is it for you to say no?
+Follow-up: How often do you successfully set boundaries?
+7.Are there situations or relationships where you feel unsafe? 
+Follow-up: How unsafe do you feel?
+Follow-up: How often are you in these situations?
+8.Do you have resources and support if your safety is threatened? 
+Follow-up: How many resources or people can you turn to?
+Follow-up: How confident are you that help is available?
+9.Do you feel safe in all areas of your life (home, school, social)? 
+Follow-up: How safe do you feel in each area?
+Follow-up: How many areas feel completely safe?
+10.Can you identify when you feel unsafe? 
+Follow-up: How quickly can you recognize it?
+Follow-up: How often do you feel unsafe?
+11.Do people respect your personal space? 
+Follow-up: How much do they respect it?
+Follow-up: How often is your space invaded?
+12.Have you experienced cyberbullying? 
+Follow-up: How severe was it?
+Follow-up: How many times has it happened?
+13.Do you feel emotionally safe with your friends and family? 
+Follow-up: How emotionally safe do you feel?
+Follow-up: How often do you feel emotionally protected?
+14.Can you remove yourself from unsafe situations? 
+Follow-up: How able are you to leave?
+Follow-up: How often do you need to remove yourself?
+15.Do you know how to get help if you need it? 
+Follow-up: How confident are you about getting help?
+Follow-up: How many ways do you know to get help?
+16.Are there adults in your life who protect you? 
+Follow-up: How many protective adults do you have?
+Follow-up: How often are they available when you need them?
+CONNECTION (Fostering Interaction & Belonging)
+1.How connected do you feel to your friends right now? 
+Follow-up: How strong is that connection?
+Follow-up: How many close friends do you feel connected to?
+2.Do you feel like you belong somewhere? 
+Follow-up: How strong is your sense of belonging?
+Follow-up: How many places or groups make you feel like you belong?
+3.Who can you really talk to about important stuff? 
+Follow-up: How many people can you confide in?
+Follow-up: How often do you have deep conversations?
+4.How are your relationships with family going? 
+Follow-up: How would you rate your family relationships?
+Follow-up: How often do you have positive interactions with family?
+5.Do you feel understood by the people around you? 
+Follow-up: How understood do you feel?
+Follow-up: How many people truly understand you?
+6.Are there communities or groups where you feel you fit in? 
+Follow-up: How well do you fit in?
+Follow-up: How many groups do you belong to?
+7.Do you feel lonely or isolated sometimes? 
+Follow-up: How lonely do you feel?
+Follow-up: How many days a week do you feel lonely?
+8.How's your social life been lately? 
+Follow-up: How satisfied are you with your social life?
+Follow-up: How many social interactions do you have per week?
+9.Do you have meaningful relationships? 
+Follow-up: How meaningful are they?
+Follow-up: How many meaningful relationships do you have?
+10.Can you be yourself around your friends? 
+Follow-up: How much of your true self can you show?
+Follow-up: How often do you feel you need to hide parts of yourself?
+11.Do people reach out to you? 
+Follow-up: How often do people contact you?
+Follow-up: How many people regularly reach out?
+12.How supported do you feel by others? 
+Follow-up: How strong is that support?
+Follow-up: How often do you feel supported?
+13.Do you feel part of your school community? 
+Follow-up: How much do you feel part of it?
+Follow-up: How many school activities or groups are you involved in?
+14.Are your relationships reciprocal (give and take)? 
+Follow-up: How balanced are your relationships?
+Follow-up: How often do you feel the balance is off?
+15.Do you trust the people in your life? 
+Follow-up: How much do you trust them?
+Follow-up: How many people do you truly trust?
+16.How often do you spend quality time with people you care about? 
+Follow-up: How many hours per week?
+Follow-up: How satisfied are you with the time you spend together?
+RESILIENCE (Coping Strategies & Autonomy)
+1.How do you bounce back when things don't go your way? 
+Follow-up: How quickly do you bounce back?
+Follow-up: How often do you face setbacks?
+2.What strategies do you use to cope with difficult situations? 
+Follow-up: How effective are these strategies?
+Follow-up: How many different coping strategies do you have?
+3.Do you feel like you have control over your life choices? 
+Follow-up: How much control do you feel you have?
+Follow-up: How often do you make your own decisions?
+4.How do you handle disappointment or failure? 
+Follow-up: How well do you handle it?
+Follow-up: How long does it take you to recover?
+5.What helps you stay strong during tough times? 
+Follow-up: How much does it help?
+Follow-up: How often do you use these resources?
+6.Do you feel capable of solving your own problems? 
+Follow-up: How capable do you feel?
+Follow-up: How many problems can you solve independently?
+7.Can you adapt when plans change or things get difficult? 
+Follow-up: How easily can you adapt?
+Follow-up: How often do you need to adapt?
+8.What do you do to take care of yourself when stressed? 
+Follow-up: How effective is your self-care?
+Follow-up: How often do you practice self-care?
+9.Do you persevere when things are challenging? 
+Follow-up: How persistent are you?
+Follow-up: How often do you give up versus push through?
+10.Can you manage your emotions effectively? 
+Follow-up: How well can you manage them?
+Follow-up: How often do emotions feel unmanageable?
+11.Do you learn from difficult experiences? 
+Follow-up: How much do you learn?
+Follow-up: How often do you reflect on what you've learned?
+12.How independent do you feel? 
+Follow-up: How independent are you?
+Follow-up: How many things can you do without help?
+13.Can you ask for help when you need it? 
+Follow-up: How comfortable are you asking for help?
+Follow-up: How often do you reach out for support?
+14.Do you have a growth mindset about challenges? 
+Follow-up: How much do you see challenges as opportunities?
+Follow-up: How often do you embrace challenges versus avoid them?
+15.How do you talk to yourself during difficult times? 
+Follow-up: How positive or negative is your self-talk?
+Follow-up: How often do you practice positive self-talk?
+16.Can you stay calm under pressure? 
+Follow-up: How calm do you stay?
+Follow-up: How often do you face high-pressure situations?
+INCLUSIVITY (Feelings of Inclusion)
+1.Do you feel accepted for who you are? 
+Follow-up: How accepted do you feel?
+Follow-up: How often do you feel fully accepted?
+2.Have you experienced being excluded or discriminated against? 
+Follow-up: How often has this happened?
+Follow-up: How much did it affect you?
+3.Do you feel like your voice and opinions matter? 
+Follow-up: How much do you feel heard?
+Follow-up: How often do people listen to your opinions?
+4.Are there spaces where you don't feel welcome? 
+Follow-up: How unwelcome do you feel?
+Follow-up: How many spaces make you feel excluded?
+5.Do you feel comfortable being yourself around others? 
+Follow-up: How comfortable are you being authentic?
+Follow-up: How often do you feel you need to hide parts of yourself?
+6.Have you witnessed or experienced unfair treatment? 
+Follow-up: How unfair was the treatment?
+Follow-up: How often do you witness or experience this?
+7.Do you feel valued in your school or community? 
+Follow-up: How valued do you feel?
+Follow-up: How many places make you feel valued?
+8.Are there parts of your identity that feel hard to share? 
+Follow-up: How difficult is it to share these parts?
+Follow-up: How often do you hide aspects of your identity?
+9.Do you feel like you belong in different social groups? 
+Follow-up: How strong is your sense of belonging?
+Follow-up: How many groups do you feel you belong to?
+10.Have you been treated differently because of who you are? 
+Follow-up: How different was the treatment?
+Follow-up: How often does this happen?
+11.Do people respect your differences? 
+Follow-up: How much respect do you receive?
+Follow-up: How often do people show respect for your differences?
+12.Do you feel included in activities and conversations? 
+Follow-up: How included do you feel?
+Follow-up: How often are you left out?
+13.Can you express your identity freely? 
+Follow-up: How freely can you express yourself?
+Follow-up: How often do you feel restricted?
+14.Do you feel equal to others? 
+Follow-up: How equal do you feel?
+Follow-up: How often do you feel less than or more than others?
+15.Are diverse perspectives welcomed in your environment? 
+Follow-up: How welcomed are different perspectives?
+Follow-up: How often do you see diversity embraced?
+16.Do you feel like you have equal opportunities? 
+Follow-up: How equal do the opportunities feel?
+Follow-up: How often do you notice inequality?
+PHILOSOPHY (Beliefs, Values, Life Principles)
+1.What values guide your decisions? 
+Follow-up: How strongly do these values influence you?
+Follow-up: How often do you make decisions based on your values?
+2.What do you believe makes life meaningful? 
+Follow-up: How meaningful does your life feel right now?
+Follow-up: How often do you think about meaning in life?
+3.How do you decide what's right and wrong? 
+Follow-up: How confident are you in your moral compass?
+Follow-up: How often do you question your moral decisions?
+4.What principles are most important to you? 
+Follow-up: How important are these principles?
+Follow-up: How many core principles guide you?
+5.What kind of person do you want to be? 
+Follow-up: How close are you to being that person?
+Follow-up: How often do you work on becoming that person?
+6.What beliefs shape how you see the world? 
+Follow-up: How strongly do you hold these beliefs?
+Follow-up: How often do your beliefs influence your actions?
+7.What matters most to you in life? 
+Follow-up: How much does it matter?
+Follow-up: How often do you prioritize what matters most?
+8.How do your values influence your daily choices? 
+Follow-up: How much influence do they have?
+Follow-up: How many daily choices reflect your values?
+9.Do you have a sense of what's good and fulfilling? 
+Follow-up: How clear is that sense?
+Follow-up: How often do you pursue what's fulfilling?
+10.What ethical principles do you follow? 
+Follow-up: How strictly do you follow them?
+Follow-up: How often do you face ethical dilemmas?
+11.Do your actions align with your beliefs? 
+Follow-up: How well aligned are they?
+Follow-up: How often do you act against your beliefs?
+12.What gives you a sense of integrity? 
+Follow-up: How strong is your sense of integrity?
+Follow-up: How often do you feel you've maintained your integrity?
+13.How do you define success for yourself? 
+Follow-up: How successful do you feel by your definition?
+Follow-up: How often do you measure your success?
+14.What matters to you in relationships? 
+Follow-up: How important are these qualities?
+Follow-up: How many of your relationships reflect these values?
+15.Do you have guiding principles for difficult times? 
+Follow-up: How helpful are these principles?
+Follow-up: How often do you rely on them?
+16.What legacy do you want to leave? 
+Follow-up: How important is leaving a legacy to you?
+Follow-up: How often do you think about your impact?
+
+The 8 Wellbeing Dimensions are called "Well 8":
+1. Purpose
+2. Physical
+3. Mental
+4. Safety
+5. Connection
+6. Resilience
+7. Inclusivity
+8. Philosophy
+
+Intended Elo Bot Interaction Experience for target audience: Students of 10-13 years age.
+- Friendly buddy-style, short, interactive chat, not survey-like – with hidden assessment underneath. Assessment MUST NOT be apparent to the student.
+- Easy to read and enjoyable for students
+- Engaging, gamified experience encouraging emotional reflection
+
+Daily Interaction Design (aimed mostly for students of age 10-11 years):
+- Typical duration 2–3 minutes; engaged up to 5 minutes max
+- Flexible pacing on low-mood days
+- 4–7 micro prompts per day. Covers 2–3 wellbeing dimensions daily, not all 8.
+You may consider a bit more interaction plus a slightly more intricate chat with the students of age 12-13 years.
+
+Wellbeing measuring algorithm:
+1.Evaluate eight themes of wellbeing (Well 8) based categories
+2.Uses a 0-50 scale for each dimension, totalling 0-400 points overall
+3.Provides clear scoring brackets as per age: For example: (the exact thresholds may vary upon the profile of individual student, their genders and other parameters)
+•	0-199: Underdeveloped/Developing (typical of ages 5-7)
+•	200-299: Average/Sound Development (typical of ages 8-13): Our relevant group is 10 to 13 years. So somewhere around 233 to 299 is relevant score.
+•	300-400: Well-Developed/Thriving (typical of ages 14-16)
+
+Following are included for each dimension:
+- Detailed descriptions of what each score range looks like
+- Observable indicators to help with assessment
+- Potential concerns for lower scores
+- Practical improvement strategies
+
+The algorithm addresses all categories while providing a comprehensive framework for understanding a child's overall wellbeing development. It can be used by parents, educators, or healthcare providers to identify areas of strength and opportunities for growth.
+This algorithm measures wellbeing development in children and teens (ages 5-16) across eight key dimensions. Each dimension is scored on a scale of 0-50, for a total possible score of 0-400.
+Score Interpretation:
+•	0-199: Underdeveloped/Developing (typical of ages 5-7)
+•	200-299: Average/Sound Development (typical of ages 8-13)
+•	300-400: Well-Developed/Thriving (typical of ages 14-16)
+
+Overall Wellbeing Score Interpretation:
+0-199: Underdeveloped/Developing Wellbeing (Typical of ages 5-7)
+Children in this range are still developing fundamental wellbeing capacities. This is normal and appropriate for younger children (5-7) but concerning for older children. Scores in this range for older children may indicate developmental delays, traumatic experiences, or significant gaps in support systems.
+Key characteristics:
+•	Heavy reliance on adults for emotional regulation and decision-making
+•	Concrete thinking with limited self-reflection
+•	Developing basic understanding of emotions, boundaries, and social rules
+•	Normal egocentrism appropriate to early development
+Potential risks if persistent in older children:
+•	Developmental delays across multiple domains
+•	Vulnerability to manipulation or exploitation
+•	Difficulty forming healthy relationships
+•	Poor self-concept and limited sense of agency
+•	Foundation for anxiety, depression, or behavioural problems
+Recommended approach:
+•	Focus on building foundational skills in lagging dimensions
+•	Create highly structured, predictable environments
+•	Provide significant adult support while gradually building independence
+•	Consider developmental assessment if significantly behind age expectations
+•	Implement targeted interventions for specific domains scoring below 20
+200-299: Average/Sound Wellbeing (Typical of ages 8-13)
+Children in this range demonstrate age-appropriate wellbeing across most domains. This represents typical development for middle childhood and early adolescence, with growing independence, social awareness, and self-regulation. 
+Key characteristics:
+•	Increasing self-regulation and independence
+•	Developing more complex understanding of emotions and relationships
+•	Growing awareness of others' perspectives and social dynamics
+•	Beginning to form personal values and interests
+Potential areas for attention:
+•	Uneven development across dimensions (some high, some low)
+•	Emerging identity questions and social pressures
+•	Increased academic and social demands requiring new coping strategies
+•	Growing need for autonomy balanced with continued guidance
+Recommended approach:
+•	Support dimensions scoring below 30 with targeted strategies
+•	Provide opportunities for appropriate independence and decision-making
+•	Foster connections with positive peer groups and role models
+•	Teach more advanced coping strategies and problem-solving skills
+•	Encourage exploration of interests and strengths
+300-400: Well-Developed/Thriving Wellbeing (Typical of ages 14-16)
+Young people in this range demonstrate advanced wellbeing capacities across most or all dimensions. This represents optimal development for adolescents, with sophisticated emotional understanding, strong interpersonal skills, and emerging life direction.
+Key characteristics:
+•	Strong self-awareness and identity development
+•	Effective emotional regulation and diverse coping strategies
+•	Well-developed moral reasoning and personal values
+•	Healthy relationships and social navigation skills
+•	Emerging sense of purpose and future orientation
+Areas for continued growth: 
+•	Refining life purpose and long-term goals
+•	Navigating increasingly complex relationships
+•	Preparing for transitions to adulthood
+•	Deepening philosophical understanding and ethical reasoning
+Recommended approach:
+•	Provide mentorship opportunities in areas of strength and interest
+•	Support healthy risk-taking and expanded responsibilities
+•	Foster leadership development and community engagement
+•	Encourage deeper exploration of philosophical questions and beliefs
+•	Prepare for upcoming life transitions with appropriate skills
+
+Using This Algorithm
+1.	Assess each dimension separately, considering observable behaviours and developmental appropriateness
+2.	Calculate total score by adding all eight-themes/dimension scores
+3.	Review individual dimension scores to identify specific strengths and growth areas
+4.	Consider both chronological age and individual factors in interpretation (this is very important for holistic consideration)
+5.	Implement targeted improvement strategies for dimensions scoring below age expectations (primary lookout)
+6.	Reassess periodically (every 3-6 months) to track progress (depends on how soon we can start publishing the wellbeing. It may take few weeks to chat with the child and have enough data about their individual wellbeing to comment)
+7.	Use results to inform supportive interventions and developmental opportunities (primary lookout)
+
+Rubrics for rating individual student's wellbeing is provided in the respective tabs of the attached Well8Rubric.xlsx file.
+Each tab in the worksheet provides a rubric for a wellbeing dimension.
+Dimension 1 (Tab 1): Purpose: Sense of Worth: The central, organising aim or direction that gives meaning and significance to actions and experiences.
+Dimension 2 (Tab 2): Physical: Nutrition, Exercise and Lifestyle: The optimal health and functioning of the body through nutrition, physical activity, and healthy habits.
+Dimension 3 (Tab 3): Mental: Anxiety, Uncertainty & Navigation: The positive state of emotional and psychological health, characterised by resilience, emotional intelligence and effective coping with challenges
+Dimension 4 (Tab 4): Safety: Boundaries and Personal Space: The state of being protected from harm physically and psychologically, with clear understanding of appropriate boundaries
+Dimension 5 (Tab 5): Connection: Fostering Interaction & Creating a Sense of Belonging: The meaningful relationships and interactions with self, others, community, and environment
+Dimension 6 (Tab 6): Resilience: Coping Strategies and Embracing Autonomy: The ability to adapt positively and maintain wellbeing despite adversity or challenges
+Dimension 7 (Tab 7): Inclusivity: Combating Discrimination: Practices and environments that actively welcome and value diversity, ensuring respect and empowerment for all
+Dimension 8 (Tab 8): Philosophy: Beliefs and Life Principles: The framework for understanding what constitutes a good life and how to achieve wellbeing
+
+The above is the overall context of the Elo Bot of the Welbeing Buddy MVP app.
+
+Keep this in your attention. Do not reply to this query.
+-----------------------------------------------------------
+
+The attached Well8Rubric.xlsx file contains the rubrics for scoring a student on the 8 wellness dimensions. It contains the following fields (columns) for each of the 8 wellness dimensions.
+- Score
+- Description
+- Observable Indicators
+- Potential Concerns
+- Improvement Strategies
+Each dimension in respective tab of the worksheet.
+It also contains rows for scores: 0-19, 20-34 and 35-50. For low medium and high scores the rows in the rubric provides the following fields:
+- Detailed descriptions of what each score range looks like
+- Observable indicators to help with assessment
+- Potential concerns for lower scores
+- Practical improvement strategies
+
+Also, keep this in your attention. Do not reply to this query.
+-----------------------------------------------------------
+
+Now, consider calculating wellness scores and other inferencing about a child:
+
+Can a LLM calculate a nearly accurate Wellness score in each of the 8 dimensions for a 10-13 years old student on a current date, if we provide the following inputs as a prompt? Can It reply me all the other outputs I need?
+- Child's Profile:
+  * Age
+  * Gender
+- Current date
+- History of Wellness scores in each of the 8 dimensions:
+  * Average weekly Wellness scores in each of the 8 dimensions for each of the past 4 weeks
+  * Average weekly Wellness scores in each of the 8 dimensions for the past 12 weeks
+  * Average weekly Wellness scores in each of the 8 dimensions for the past 52 weeks
+- Chat history of the Wellbeing questions:
+  * History of all chat in the last week (covering at least 1 question from each of the 8 dimensions)
+  * Synopsis of the chats with Elo in the last 3 weeks prior to current week (3*1024 characters)
+  * Synopsis of the chats with Elo in the last 5 to 12 weeks (1024 characters)
+  * Synopsis of the chats with Elo in the last 13 to 52 weeks (1024 characters)
+- Comments by guardian:
+  * All comments by parent in the last 4 weeks
+  * Synopsis of comments by parent in 48 weeks prior to the recent 4 weeks (1024 characters)
+  * All comments by teacher in the last 4 weeks
+  * Synopsis of comments by teacher in 48 weeks prior to the recent 4 weeks (1024 characters)
+- Journal written by child:
+  * Text of journal written in the last week
+  * Synopsis of journal written in last 3 weeks prior to current week (3*1024 characters)
+  * Synopsis of journal written in the last 5 to 52 weeks (1024 characters)
+Note, many of the above inputs may not be available always.
+The Wellness scores in each of the 8 dimensions must be an array of 8 numbers (floating point with up to 3 decimal places) between 0 and 50.
+I need the output in the following format:
+- Scores:
+  - purpose = ? float(5,3)
+  - physical = ? float(5,3)
+  - mental = ? float(5,3)
+  - safety = ? float(5,3)
+  - connection = ? float(5,3)
+  - resilience = ? float(5,3)
+  - inclusivity = ? float(5,3)
+  - philosophy = ? float(5,3)
+- Description:
+  - what each of the 8 Wellness score means for the child of the above age and gender? (2-3 sentences, 1024 characters)
+- Observable Indicators
+  - what exact indicators led to the particular 8 Wellness scores for the child? (consider past history as well) (2-3 sentences, 1024 characters)
+- Potential Concerns
+  - what Potential Concerns, if any about the particular 8 Wellness scores for the child? (consider past history as well) (2-3 sentences, 1024 characters)
+- Improvement Strategies
+  - what Improvement Strategies, if any about the particular 8 Wellness scores for the child? (consider past history as well) (2-3 sentences, 1024 characters)
+- Total sum of wellness score. If this Red, Amber-Red, Amber, Amber-Green or Green for the particular child of the above age and gender?
+  - why?
+Can a LLM calculate a nearly accurate Wellness score in each of the 8 dimensions for a 10-13 years old student on a current date? Can It reply me all the other outputs I need as stated above?
+-----------------------------------------------------------
+
+Give me a production-ready prompt spec for the extraction step.
+
+-----------------------------------------------------------
+
+Give me the deterministic scoring engine spec that consumes this output and produces the final 0–50 floats + RAG label.
+Do you mean the same by "a scoring formula (with recency weights + smoothing)" and "deterministic scoring engine spec that consumes this output and produces the final 0–50 floats + RAG label."?

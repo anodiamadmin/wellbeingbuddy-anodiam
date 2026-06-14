@@ -1,0 +1,80 @@
+[ Student Opens Check-in ]
+           │
+           ▼
+[ Read 4-Day Roster Index ] ──► (Determines today's 2 target dimensions)
+           │
+           ▼
+[ Present Dimension A Slider: 1-5 ]
+           │
+           ▼
+[ Student Submits Numeric Score ]
+           │
+           ▼
+┌───────────────────────────────────────┐
+│  Model 4 Safety Interceptor (Math)    │
+└───────────────────────────────────────┘
+           │
+           ├──► (YES: If Score Drops Safety < 20) ──► [ TRIGGER CRISIS PROTOCOL ]
+           │                                                   │
+           │                                                   ▼
+           │                                        [ Fire SSE Alert to Adults ]
+           │                                        [ Save Immutable Audit Record ]
+           │                                        [ Lock UI & Terminate Session ]
+           │
+           └──► (NO: Score is Safe)
+                       │
+                       ▼
+             { Evaluate Score Level }
+                       │
+                       ├──► (High Score: 4-5) ──► [ Save Score to DB ]
+                       │                                 │
+                       │                                 ▼
+                       │                      { Is there a Dimension B? }
+                       │                                 │
+                       │                                 ├──► (YES) ──► Loop back to Dim B Slider
+                       │                                 └──► (NO)  ──► [ Move to Async Queue ]
+                       │
+                       └──► (Low Score: 1-3)
+                                   │
+                                   ▼
+                     [ Model 1: Drafts 1 Follow-Up Question ]
+                                   │
+                                   ▼
+                     ┌──────────────────────────────┐
+                     │   Model 2: Clinical Audit    │
+                     └──────────────────────────────┘
+                                   │
+                                   ├──► (REJECTED) ──► [ Inject Safe Fallback Question ]
+                                   │                           │
+                                   └──► (APPROVED)             │
+                                           │                   │
+                                           ▼                   ▼
+                                 [ Display Follow-Up Question to Student ]
+                                           │
+                                           ▼
+                                 [ Student Inputs Text Response ]
+                                           │
+                                           ▼
+                                 ┌───────────────────────────────────┐
+                                 │    Model 4 Interceptor (Text)     │
+                                 └───────────────────────────────────┘
+                                           │
+                                           ├──► (YES: Crisis Detected) ──► [ TRIGGER CRISIS PROTOCOL ]
+                                           │
+                                           └──► (NO: Text is Safe)
+                                                       │
+                                                       ▼
+                                             [ Save Text for Async Scorer ]
+                                                       │
+                                                       ▼
+                                            { Is there a Dimension B? }
+                                                       │
+                                                       ├──► (YES) ──► Loop back to Dim B Slider
+                                                       └──► (NO)  ──► [ Move to Async Queue ]
+                                                                             │
+                                                                             ▼
+                                                                  [ Model 3: Semantic Scorer ]
+                                                                  [ Update 7-Day Rolling Avg ]
+                                                                             │
+                                                                             ▼
+                                                                    ([ Check-In Complete ])
