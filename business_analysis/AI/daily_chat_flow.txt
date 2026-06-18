@@ -1,11 +1,11 @@
 {
   "user_wellbeing":
   {
-    "user_id": "13456789012345678901",	
-    "session_id": "sess_20260609_160000_abc123",	
-    "safety_flag": {"value": false, "unsafe_converstaion": null, "safety_flag_reason": null, "safety_flag_timestamp": null},
+    "user_id": "13456789012345678901",
+    "session_id": "sess_20260609_160000_abc123",
     "login_timestamp": "2026-06-09T16:00:00+10:00",
-    "mood_checkin": {"mood_checkin_timestamp": null, "mood_checkin_entry": null},
+    "safety_flag": {"value": false, "unsafe_converstaion": null, "safety_flag_reason": null, "safety_flag_timestamp": null},
+    "mood_checkin": {"value": null, "mood_checkin_entry": null, "mood_checkin_timestamp": null},
     "recent_journal": {"journal_timestamp": null, "journal_entry": null},
     "wellbeing_signals":
     {
